@@ -146,41 +146,44 @@ class Stack {
             
             cout<<"insert_at("<<idx<<","<<data<<");"<<endl;
             
-            //insert to empty stack, use the standard push() function which handles empty stack case
-            if(size==0){
-                cout<<"insert_at(): 'size==0'"<<endl;
-                push(data);
-                inserted = true;
-            }
-            //stack is non-empty. 
-            else{
-                //insert idx is greater than size, push to the head as standard LIFO behavior using push()
-                if(idx >= size){
-                    cout<<"insert_at(): 'idx >= size'"<<endl;
+            //make sure idx is equal or greater than 0
+            if(idx>=0){
+                //insert to empty stack, use the standard push() function which handles empty stack case
+                if(size==0){
+                    cout<<"insert_at(): 'size==0'"<<endl;
                     push(data);
                     inserted = true;
                 }
-                //insert into the middle
-                else if(idx > 0){
-                    cout<<"insert_at(): idx > 0"<<endl;
-                    for(int i = 0; i < idx;i++){
-                        current_node = current_node->next;
-                    }
-                    
-                    Node* new_node = new Node(data, current_node->previous, current_node);
-                    current_node->previous->next=new_node;
-                    current_node->previous = new_node;
-                    size += 1;
-                    inserted = true;
-                }
-                //idx is 0
+                //stack is non-empty. 
                 else{
-                    cout<<"insert_at(): 'idx==0'"<<endl;
-                    Node* new_node = new Node(data, NULL, tail);
-                    tail->previous = new_node;
-                    tail = new_node;
-                    size += 1;
-                    inserted = true;
+                    //insert idx is greater than size, push to the head as standard LIFO behavior using push()
+                    if(idx >= size){
+                        cout<<"insert_at(): 'idx >= size'"<<endl;
+                        push(data);
+                        inserted = true;
+                    }
+                    //insert into the middle
+                    else if(idx > 0){
+                        cout<<"insert_at(): idx > 0"<<endl;
+                        for(int i = 0; i < idx;i++){
+                            current_node = current_node->next;
+                        }
+                        
+                        Node* new_node = new Node(data, current_node->previous, current_node);
+                        current_node->previous->next=new_node;
+                        current_node->previous = new_node;
+                        size += 1;
+                        inserted = true;
+                    }
+                    //idx is 0
+                    else{
+                        cout<<"insert_at(): 'idx==0'"<<endl;
+                        Node* new_node = new Node(data, NULL, tail);
+                        tail->previous = new_node;
+                        tail = new_node;
+                        size += 1;
+                        inserted = true;
+                    }
                 }
             }
             return inserted;
@@ -353,6 +356,13 @@ void test_insert_at(){
     mystack.show_stuff();
     mystack.push(3);
     mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    
+    cout<<"========== insert_at negative index =========="<<endl;
+    mystack.show_stuff();  
+    mystack.insert_at(-1,1);
+    mystack.show_stuff();   
     mystack.empty_stack();
     mystack.show_stuff();
     cout<<endl;    
