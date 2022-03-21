@@ -166,9 +166,7 @@ class Stack {
                         current_node = current_node->next;
                     }
                     
-                    Node* new_node = new Node(data, NULL, NULL);
-                    new_node->next = current_node;
-                    new_node->previous = current_node->previous;
+                    Node* new_node = new Node(data, current_node->previous, current_node);
                     current_node->previous->next=new_node;
                     current_node->previous = new_node;
                     size += 1;
@@ -177,9 +175,7 @@ class Stack {
                 //idx is 0
                 else{
                     cout<<"insert_at(): 'idx==0'"<<endl;
-                    Node* new_node = new Node(data, NULL, NULL);
-                    new_node->previous = NULL;
-                    new_node->next = tail;
+                    Node* new_node = new Node(data, NULL, tail);
                     tail->previous = new_node;
                     tail = new_node;
                     size += 1;
