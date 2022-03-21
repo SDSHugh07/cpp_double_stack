@@ -160,6 +160,7 @@ class Stack {
                     push(data);
                     inserted = true;
                 }
+                //insert into the middle
                 else if(idx > 0){
                     cout<<"insert_at(): idx > 0"<<endl;
                     for(int i = 0; i < idx;i++){
@@ -182,7 +183,6 @@ class Stack {
                     inserted = true;
                 }
             }
-
             return inserted;
         }
     
