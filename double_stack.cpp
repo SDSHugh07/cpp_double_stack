@@ -207,8 +207,98 @@ class Stack {
                 size -=1;
             }
         }
+        
+        bool remove_at(int idx){
+            bool removed = false;
+            Node* current_node = tail;
+            
+            cout<<"remove_at("<<idx<<");"<<endl;
+            
+            //make sure idx is equal or greater than 0
+            if(idx>=0){
+                //if stack empty, nothing to remove return false
+                if(size==0){
+                    cout<<"remove_at(): 'size==0' nothing to remove"<<endl;
+                    removed = false;
+                }
+                //single element stack, reset head/tail to NULL
+                else if(size==1){
+                    cout<<"remove_at(): 'size==1' single element stack, reset head/tail to NULL"<<endl;
+                        
+                    Node* temp;
+                    
+                    temp = tail;
+                    
+                    tail = NULL;
+                    head = NULL;
+                    
+                    free(temp);
+                    
+                    size -= 1;
+                    removed = true;
+                }
+                //stack is non-empty. 
+                else{
+                    //remove idx is greater than size, return false
+                    if(idx >= size){
+                        cout<<"remove_at(): 'idx >= size' cannot remove"<<endl;
+                        removed = false;
+                    }
+                    //remove head
+                    else if (idx == size-1){
+                        cout<<"remove_at(): 'idx == size-1' removing head"<<endl;
+                                        
+                        Node* temp;
+                        temp = head;
+                
+                        head->previous->next = NULL;
+                        head = head->previous;
+                
+                        free(temp); 
+                
+                        size -= 1;
+                        removed = true;
+                    }
+                    //remove from the middle
+                    else if(idx > 0){
+                        cout<<"remove_at(): 'idx > 0' remove from middle"<<endl;
+                        for(int i = 0; i < idx;i++){
+                            current_node = current_node->next;
+                        }
+                        
+                        Node* temp;
+                        
+                        temp = current_node;
+                        current_node->next->previous = current_node->previous;
+                        current_node->previous->next = current_node->next;
+                        
+                        free(temp);
+                        
+                        size -= 1;
+                        removed = true;
+                    }
+                    //idx is 0, remove tail
+                    else{
+                        cout<<"remove_at(): 'idx==0' removing tail"<<endl;
+                
+                        Node* temp;
+                        temp = tail;
+                
+                        tail->next->previous = NULL;
+                        tail = tail->next;
+                
+                        free(temp); 
+                
+                        size -= 1;
+                        removed = true;
+                    }
+                }
+            }
+            return removed;
+        }
 
         void empty_stack(){
+            cout<<"empty_stack()"<<endl;
             while(!isEmpty()){
                 pop();
             }
@@ -367,11 +457,148 @@ void test_insert_at(){
     mystack.show_stuff();
     cout<<endl;    
 }
+
+void test_remove_at(){
+    Stack mystack;
+    
+    cout<<"========== remove_at negative index =========="<<endl;
+    mystack.show_stuff();  
+    mystack.remove_at(-1);
+    mystack.show_stuff();   
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+
+    cout<<"========== remove_at to empty at 0 idx=========="<<endl;
+    mystack.show_stuff();  
+    mystack.remove_at(0);
+    mystack.show_stuff();   
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+    cout<<"========== remove_at to empty at non-0 idx=========="<<endl;
+    mystack.show_stuff();  
+    mystack.remove_at(3);
+    mystack.show_stuff();   
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+    
+    cout<<"========== remove_at to non-empty at greater than end =========="<<endl;
+    mystack.push(2);
+    mystack.push(4);
+    
+    mystack.show_stuff();
+    
+    mystack.remove_at(5);
+    
+    mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+        
+    cout<<"========== remove_at to non-empty at middle =========="<<endl;
+    mystack.push(2);
+    mystack.push(3);
+    mystack.push(4);
+    
+    mystack.show_stuff();
+    
+    mystack.remove_at(1);
+    
+    mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+    
+    cout<<"========== remove_at to non-empty at idx-0 =========="<<endl;
+    mystack.push(2);
+    mystack.push(4);
+    
+    mystack.show_stuff();
+    
+    mystack.remove_at(0);
+    mystack.show_stuff();
+    mystack.insert_at(0,3);
+    mystack.push(5);
+    mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+    cout<<"========== remove_at single element idx-0 =========="<<endl;
+    mystack.push(2);
+    
+    mystack.show_stuff();
+    
+    mystack.remove_at(0);
+    mystack.show_stuff();
+    mystack.insert_at(0,1);
+    mystack.push(2);
+    mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+    cout<<"========== remove_at single element idx-0 =========="<<endl;
+    mystack.push(2);
+    
+    mystack.show_stuff();
+    
+    mystack.remove_at(0);
+    mystack.show_stuff();
+    mystack.push(1);
+    mystack.insert_at(1,2);
+    mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+    cout<<"========== remove_at tail of non-empty =========="<<endl;
+    mystack.push(2);
+    mystack.push(3);
+    mystack.push(4);
+    
+    mystack.show_stuff();
+    
+    mystack.remove_at(0);
+    
+    mystack.show_stuff();
+    mystack.insert_at(0,2);
+    mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;
+    
+    cout<<"========== remove_at head of non-empty =========="<<endl;
+    mystack.push(2);
+    mystack.push(3);
+    mystack.push(4);
+    
+    mystack.show_stuff();
+    
+    mystack.remove_at(2);
+    
+    mystack.show_stuff();
+    mystack.insert_at(2,4);
+    mystack.show_stuff();
+    mystack.remove_at(2);
+    mystack.push(4);
+    mystack.show_stuff();
+    mystack.empty_stack();
+    mystack.show_stuff();
+    cout<<endl;    
+}
     
 int main ()
 {   
     test_standard();
     test_insert_at();
+    test_remove_at();
     
     cout<<"goodbye"<<endl;
 
